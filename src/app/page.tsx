@@ -6,13 +6,17 @@ import SpecialtiesWalker from "@/components/themes/walker/SpecialtiesWalker";
 import FooterWalker from "@/components/themes/walker/FooterWalker";
 
 import EventGallery from "@/components/EventGallery";
+import Testimonials from "@/components/Testimonials";
+import { getSiteSettings } from "@/sanity/lib/fetchers";
 
-export default function Home() {
+export default async function Home() {
+  const settings = await getSiteSettings();
+
   return (
     <main className="min-h-screen bg-white">
       <HeaderWalker />
-      <HeroWalker />
-      <ProcessWalker />
+      <HeroWalker tagline={settings?.tagline} companyName={settings?.companyName} />
+      <ProcessWalker aboutText={settings?.aboutText} />
       <ServicesWalker />
       <SpecialtiesWalker />
 
@@ -21,7 +25,10 @@ export default function Home() {
         <EventGallery />
       </section>
 
-      <FooterWalker />
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      <FooterWalker settings={settings} />
     </main>
   );
 }

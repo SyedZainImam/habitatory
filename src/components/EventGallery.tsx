@@ -1,24 +1,14 @@
 import React from "react";
 import Image from "next/image";
-import { client } from "@/sanity/lib/client";
-
-// Define the GROQ Query
-const EVENTS_QUERY = `*[_type == "event"] | order(date desc) {
-  _id,
-  title,
-  slug,
-  category,
-  date,
-  description,
-  "coverImageUrl": coverImage.asset->url
-}`;
+import { getAllEvents } from "@/sanity/lib/fetchers";
+import type { Event } from "@/sanity/lib/types";
 
 export default async function EventGallery() {
-    let events = [];
+    let events: Event[] = [];
     let error = null;
 
     try {
-        events = await client.fetch(EVENTS_QUERY);
+        events = await getAllEvents();
     } catch (err) {
         console.error("Error fetching events:", err);
         error = "Failed to load events. Please try again later.";

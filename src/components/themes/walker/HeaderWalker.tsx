@@ -73,19 +73,14 @@ const HeaderWalker = () => {
                         onClick={(e) => handleNavClick(e, "#home")}
                         className="flex items-center gap-3 group"
                     >
-                        <div
-                            className={`relative rounded-lg overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.35)] ${scrolled ? "w-10 h-10" : "w-12 h-12"
-                                }`}
-                        >
-                            <Image
-                                src="/images/3ad81537-283c-45db-bfb8-f423da42d528.png"
-                                alt="Habitatory Logo"
-                                width={48}
-                                height={48}
-                                className="object-contain"
-                                priority
-                            />
-                        </div>
+                        <Image
+                            src="/images/logo-cropped.png"
+                            alt="Habitatory Logo"
+                            width={375}
+                            height={390}
+                            className={`object-contain transition-all duration-300 ${scrolled ? "h-8 w-auto" : "h-10 w-auto"}`}
+                            priority
+                        />
                         <span
                             className={`font-bold tracking-wide text-[#d4af37] transition-all duration-300 ${scrolled ? "text-xl" : "text-2xl"
                                 }`}

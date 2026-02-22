@@ -27,7 +27,11 @@ const PROCESS_CARDS = [
     },
 ];
 
-const ProcessWalker = () => {
+interface ProcessWalkerProps {
+    aboutText?: string;
+}
+
+const ProcessWalker = ({ aboutText }: ProcessWalkerProps) => {
     return (
         <section id="about" className="bg-white py-24 px-6 md:px-8">
             <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
@@ -39,9 +43,7 @@ const ProcessWalker = () => {
                 </h2>
                 <div className="w-16 h-0.5 bg-[#d4af37] mb-8" />
                 <p className="text-zinc-600 max-w-3xl text-sm md:text-base leading-relaxed mb-16 px-4">
-                    Habitatory specializes in bespoke celebrations tailored with
-                    uncompromising attention to detail, transforming your vision into an
-                    unparalleled reality for events of all sizes.
+                    {aboutText || "Habitatory specializes in bespoke celebrations tailored with uncompromising attention to detail, transforming your vision into an unparalleled reality for events of all sizes."}
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">

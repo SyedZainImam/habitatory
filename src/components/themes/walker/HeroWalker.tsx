@@ -17,7 +17,12 @@ const SLIDES = [
     },
 ];
 
-const HeroWalker = () => {
+interface HeroWalkerProps {
+    tagline?: string;
+    companyName?: string;
+}
+
+const HeroWalker = ({ tagline, companyName }: HeroWalkerProps) => {
     const [current, setCurrent] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -68,14 +73,14 @@ const HeroWalker = () => {
                     className="text-white text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 drop-shadow-2xl"
                     style={{ fontFamily: "var(--font-heading)" }}
                 >
-                    HABITATORY
+                    {companyName?.toUpperCase() || "HABITATORY"}
                 </h1>
                 <div className="w-20 h-px bg-[#d4af37] mb-6" />
                 <p
                     className="text-white/90 text-lg md:text-xl lg:text-2xl italic tracking-wide drop-shadow-lg"
                     style={{ fontFamily: "var(--font-heading)" }}
                 >
-                    From Celebrations to Creations
+                    {tagline || "From Celebrations to Creations"}
                 </p>
 
                 {/* Carousel Dots */}

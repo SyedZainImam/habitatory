@@ -1,3 +1,6 @@
+// Revalidate every 60 seconds — picks up Sanity CMS changes without rebuilding
+export const revalidate = 60;
+
 import HeaderWalker from "@/components/themes/walker/HeaderWalker";
 import HeroWalker from "@/components/themes/walker/HeroWalker";
 import ProcessWalker from "@/components/themes/walker/ProcessWalker";

@@ -2,14 +2,16 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
-    { label: "Home", href: "#home" },
-    { label: "About Us", href: "#about" },
-    { label: "Our Events", href: "#events" },
-    { label: "Gallery", href: "#gallery" },
-    { label: "Contact Us", href: "#contact" },
+    { label: "Home", href: "/#home", type: "anchor" },
+    { label: "About Us", href: "/about", type: "page" },
+    { label: "Our Events", href: "/#events", type: "anchor" },
+    { label: "Gallery", href: "/gallery", type: "page" },
+    { label: "Products", href: "/products", type: "page" },
+    { label: "Contact Us", href: "/#contact", type: "anchor" },
 ];
 
 const HeaderWalker = () => {
@@ -23,9 +25,11 @@ const HeaderWalker = () => {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // Intersection Observer for active section
+    // Intersection Observer for active section (only for anchor links on the home page)
     useEffect(() => {
-        const sectionIds = NAV_ITEMS.map((n) => n.href.replace("#", ""));
+        const anchorIds = NAV_ITEMS
+            .filter((n) => n.type === "anchor")
+            .map((n) => n.href.replace("/#", ""));
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -37,7 +41,7 @@ const HeaderWalker = () => {
             { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
         );
 
-        sectionIds.forEach((id) => {
+        anchorIds.forEach((id) => {
             const el = document.getElementById(id);
             if (el) observer.observe(el);
         });
@@ -46,71 +50,95 @@ const HeaderWalker = () => {
     }, []);
 
     const handleNavClick = useCallback(
-        (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-            e.preventDefault();
-            const id = href.replace("#", "");
-            const el = document.getElementById(id);
-            if (el) {
-                el.scrollIntoView({ behavior: "smooth" });
+        (e: React.MouseEvent<HTMLAnchorElement>, item: typeof NAV_ITEMS[0]) => {
+            if (item.type === "anchor") {
+                // If we're on the home page, scroll smoothly
+                const id = item.href.replace("/#", "");
+                const el = document.getElementById(id);
+                if (el) {
+                    e.preventDefault();
+                    el.scrollIntoView({ behavior: "smooth" });
+                    setMobileOpen(false);
+                }
+                // If not on the home page, let the link navigate to /#section
+            } else {
                 setMobileOpen(false);
             }
         },
         []
     );
 
+    const isActive = (item: typeof NAV_ITEMS[0]) => {
+        if (item.type === "anchor") {
+            return activeSection === item.href.replace("/#", "");
+        }
+        if (typeof window !== "undefined") {
+            return window.location.pathname === item.href;
+        }
+        return false;
+    };
+
     return (
         <>
             <header
-                className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled
-                    ? "bg-[#1a3c47]/95 backdrop-blur-md shadow-lg py-3"
-                    : "bg-transparent py-5"
-                    }`}
+                className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+                    scrolled
+                        ? "bg-[#1a3c47]/95 backdrop-blur-md shadow-lg py-3"
+                        : "bg-transparent py-5"
+                }`}
             >
                 <div className="max-w-7xl mx-auto px-6 md:px-10 flex justify-between items-center">
                     {/* Logo */}
-                    <a
-                        href="#home"
-                        onClick={(e) => handleNavClick(e, "#home")}
+                    <Link
+                        href="/"
                         className="flex items-center gap-3 group"
                     >
-                        <Image
-                            src="/images/logo-cropped.png"
-                            alt="Habitatory Logo"
-                            width={375}
-                            height={390}
-                            className={`object-contain transition-all duration-300 ${scrolled ? "h-8 w-auto" : "h-10 w-auto"}`}
-                            priority
-                        />
+                        <div
+                            className={`relative rounded-lg overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.35)] ${
+                                scrolled ? "w-10 h-10" : "w-12 h-12"
+                            }`}
+                        >
+                            <Image
+                                src="/images/3ad81537-283c-45db-bfb8-f423da42d528.png"
+                                alt="Habitatory Logo"
+                                width={48}
+                                height={48}
+                                className="object-contain"
+                                priority
+                            />
+                        </div>
                         <span
-                            className={`font-bold tracking-wide text-[#d4af37] transition-all duration-300 ${scrolled ? "text-xl" : "text-2xl"
-                                }`}
+                            className={`font-bold tracking-wide text-[#d4af37] transition-all duration-300 ${
+                                scrolled ? "text-xl" : "text-2xl"
+                            }`}
                             style={{ fontFamily: "var(--font-heading)" }}
                         >
                             Habitatory
                         </span>
-                    </a>
+                    </Link>
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:block">
                         <ul className="flex items-center gap-1">
                             {NAV_ITEMS.map((item) => {
-                                const isActive =
-                                    activeSection === item.href.replace("#", "");
+                                const active = isActive(item);
+                                const NavComponent = item.type === "page" ? Link : "a";
                                 return (
                                     <li key={item.href}>
-                                        <a
+                                        <NavComponent
                                             href={item.href}
-                                            onClick={(e) => handleNavClick(e, item.href)}
-                                            className={`relative px-4 py-2 text-sm font-medium tracking-wide transition-all duration-300 rounded-md ${isActive
-                                                ? "text-[#d4af37]"
-                                                : "text-white/80 hover:text-white"
-                                                }`}
+                                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, item)}
+                                            className={`relative px-4 py-2 text-sm font-medium tracking-wide transition-all duration-300 rounded-md ${
+                                                active
+                                                    ? "text-[#d4af37]"
+                                                    : "text-white/80 hover:text-white"
+                                            }`}
                                         >
                                             {item.label}
-                                            {isActive && (
+                                            {active && (
                                                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-[#d4af37] rounded-full" />
                                             )}
-                                        </a>
+                                        </NavComponent>
                                     </li>
                                 );
                             })}
@@ -130,10 +158,11 @@ const HeaderWalker = () => {
 
             {/* Mobile Drawer */}
             <div
-                className={`fixed inset-0 z-[60] md:hidden transition-all duration-300 ${mobileOpen
-                    ? "opacity-100 pointer-events-auto"
-                    : "opacity-0 pointer-events-none"
-                    }`}
+                className={`fixed inset-0 z-[60] md:hidden transition-all duration-300 ${
+                    mobileOpen
+                        ? "opacity-100 pointer-events-auto"
+                        : "opacity-0 pointer-events-none"
+                }`}
             >
                 {/* Backdrop */}
                 <div
@@ -143,8 +172,9 @@ const HeaderWalker = () => {
 
                 {/* Drawer panel */}
                 <div
-                    className={`absolute top-0 right-0 w-72 h-full bg-[#1a3c47] shadow-2xl transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "translate-x-full"
-                        }`}
+                    className={`absolute top-0 right-0 w-72 h-full bg-[#1a3c47] shadow-2xl transition-transform duration-300 ${
+                        mobileOpen ? "translate-x-0" : "translate-x-full"
+                    }`}
                 >
                     <div className="flex justify-end p-5">
                         <button
@@ -158,20 +188,21 @@ const HeaderWalker = () => {
                     <nav className="px-6">
                         <ul className="flex flex-col gap-2">
                             {NAV_ITEMS.map((item) => {
-                                const isActive =
-                                    activeSection === item.href.replace("#", "");
+                                const active = isActive(item);
+                                const NavComponent = item.type === "page" ? Link : "a";
                                 return (
                                     <li key={item.href}>
-                                        <a
+                                        <NavComponent
                                             href={item.href}
-                                            onClick={(e) => handleNavClick(e, item.href)}
-                                            className={`block px-4 py-3 rounded-lg text-base font-medium tracking-wide transition-all duration-300 ${isActive
-                                                ? "bg-[#d4af37]/15 text-[#d4af37] border-l-2 border-[#d4af37]"
-                                                : "text-white/70 hover:text-white hover:bg-white/5"
-                                                }`}
+                                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, item)}
+                                            className={`block px-4 py-3 rounded-lg text-base font-medium tracking-wide transition-all duration-300 ${
+                                                active
+                                                    ? "bg-[#d4af37]/15 text-[#d4af37] border-l-2 border-[#d4af37]"
+                                                    : "text-white/70 hover:text-white hover:bg-white/5"
+                                            }`}
                                         >
                                             {item.label}
-                                        </a>
+                                        </NavComponent>
                                     </li>
                                 );
                             })}

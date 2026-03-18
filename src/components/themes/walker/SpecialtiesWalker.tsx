@@ -1,36 +1,29 @@
 "use client";
 
 import React, { useState } from "react";
-import { MapPin, FileEdit, Utensils, CalendarDays, Music } from "lucide-react";
+import { Camera, Image, Palette, Music } from "lucide-react";
 
 const SPECIALTIES = [
     {
-        icon: MapPin,
-        label: "Venue Selection",
-        title: "Perfect Venues, Perfectly Matched",
+        icon: Camera,
+        label: "Event Photography",
+        title: "Capturing Every Precious Moment",
         description:
-            "From intimate spaces to grand ballrooms, we scout and secure venues that set the perfect stage for your event. Our extensive network and local expertise ensure you get the ideal location that aligns with your vision, guest count, and budget.",
+            "Our professional photography team ensures every magical moment is beautifully captured. From candid shots to curated portraits, we deliver a stunning visual story of your event that you'll treasure forever.",
     },
     {
-        icon: FileEdit,
-        label: "Contract Negotiations",
-        title: "Expert Negotiations, Maximum Value",
+        icon: Image,
+        label: "Backdrops",
+        title: "Stunning Backdrops, Different Styles",
         description:
-            "Our experts handle vendor contracts with precision, securing the best terms and protecting your interests. We leverage years of industry relationships to ensure transparent pricing, favorable clauses, and complete peace of mind.",
+            "Choose from an exquisite collection of backdrop styles — from floral walls and sequin curtains to custom-printed designs. Our backdrops create the perfect setting for photos and set the tone for your entire event.",
     },
     {
-        icon: Utensils,
-        label: "Food & Beverage",
-        title: "Culinary Experiences That Delight",
+        icon: Palette,
+        label: "Theme Selection",
+        title: "Themes That Tell Your Story",
         description:
-            "Curated menus and beverage programs designed to delight your guests and complement your event theme. From artisanal catering to signature cocktails, we craft dining experiences that become a highlight of every event.",
-    },
-    {
-        icon: CalendarDays,
-        label: "Agenda Creation",
-        title: "Strategic Scheduling, Flawless Flow",
-        description:
-            "Strategic scheduling and program flow design to maximize engagement and deliver a seamless experience. We plan every minute detail — from guest arrivals and keynote timings to entertainment transitions and send-offs.",
+            "From elegant black-tie affairs to whimsical garden parties, we help you choose and execute a theme that reflects your personality. Every detail — colors, textures, props — is curated to bring your vision to life.",
     },
     {
         icon: Music,
@@ -65,14 +58,16 @@ const SpecialtiesWalker = () => {
                             <button
                                 key={index}
                                 onClick={() => setActiveIndex(index)}
-                                className={`flex flex-col items-center gap-3 transition-all duration-300 group ${isActive ? "scale-105" : "hover:scale-[1.02]"
-                                    }`}
+                                className={`flex flex-col items-center gap-3 transition-all duration-300 group ${
+                                    isActive ? "scale-105" : "hover:scale-[1.02]"
+                                }`}
                             >
                                 <div
-                                    className={`rounded-full flex items-center justify-center transition-all duration-400 relative ${isActive
+                                    className={`rounded-full flex items-center justify-center transition-all duration-400 relative ${
+                                        isActive
                                             ? "w-24 h-24 md:w-28 md:h-28 bg-[#2C5F72] text-white shadow-lg"
                                             : "w-20 h-20 md:w-24 md:h-24 border-2 border-[#2C5F72] text-[#2C5F72] bg-white hover:bg-[#f0f7fa] shadow-sm"
-                                        }`}
+                                    }`}
                                 >
                                     <Icon
                                         size={isActive ? 36 : 28}
@@ -81,15 +76,17 @@ const SpecialtiesWalker = () => {
                                     />
                                     {/* Triangle pointer */}
                                     <div
-                                        className={`absolute -bottom-2 w-3 h-3 transform rotate-45 transition-all duration-300 ${isActive
+                                        className={`absolute -bottom-2 w-3 h-3 transform rotate-45 transition-all duration-300 ${
+                                            isActive
                                                 ? "bg-[#2C5F72] border-r border-b border-[#2C5F72]"
                                                 : "bg-white border-r border-b border-[#2C5F72]"
-                                            }`}
+                                        }`}
                                     />
                                 </div>
                                 <span
-                                    className={`text-xs md:text-sm font-semibold tracking-wide transition-colors duration-300 ${isActive ? "text-[#2C5F72]" : "text-[#2C5F72]/60"
-                                        }`}
+                                    className={`text-xs md:text-sm font-semibold tracking-wide transition-colors duration-300 ${
+                                        isActive ? "text-[#2C5F72]" : "text-[#2C5F72]/60"
+                                    }`}
                                 >
                                     {spec.label}
                                 </span>

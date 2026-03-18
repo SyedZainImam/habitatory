@@ -17,7 +17,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Habitatory — From Celebrations to Creations",
   description:
-    "Habitatory is a premium event planning brand specializing in bespoke celebrations, corporate galas, signature weddings, and private soirées. We transform your vision into reality.",
+    "Habitatory is a premium event planning brand specializing in bespoke celebrations, corporate galas, birthday parties, and private soirées. We transform your vision into reality.",
 };
 
 export default function RootLayout({

@@ -8,7 +8,7 @@ interface FooterWalkerProps {
 }
 
 const FooterWalker = ({ settings }: FooterWalkerProps) => {
-    const email = settings?.email || "info@habitatory.com";
+    const email = settings?.email || "habitatory@gmail.com";
     const phone = settings?.phone || "+180 025 2536";
     const address = settings?.address || "PO Box 4444 Eagle, CO 81631\nUnited States";
     const socialLinks = [

@@ -23,11 +23,6 @@ export default async function Home() {
       <ServicesWalker />
       <SpecialtiesWalker />
 
-      {/* Gallery Section */}
-      <section id="gallery">
-        <EventGallery />
-      </section>
-
       {/* Testimonials Section */}
       <Testimonials />
 

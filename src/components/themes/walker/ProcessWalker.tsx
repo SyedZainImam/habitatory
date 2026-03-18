@@ -1,28 +1,28 @@
 "use client";
 
 import React from "react";
-import { MapPin, FileEdit, Users } from "lucide-react";
+import { Building2, Palette, PartyPopper } from "lucide-react";
 
 const PROCESS_CARDS = [
     {
-        icon: MapPin,
-        title: "Choose Venues",
+        icon: Building2,
+        title: "Describe Your Venue",
         description:
-            "We help you discover and secure the perfect venue tailored to your theme, guest size, and budget.",
+            "Tell us about your ideal setting — indoors or outdoors, intimate or grand — and we'll bring your vision to life in the perfect space.",
         accent: true,
     },
     {
-        icon: FileEdit,
-        title: "Negotiate Contracts",
+        icon: Palette,
+        title: "Imagine a Theme",
         description:
-            "We professionally manage vendor negotiations to ensure the best value without compromising quality.",
+            "Dream up a style and aesthetic that speaks to you. From elegant minimalism to vibrant celebrations, we turn your ideas into a cohesive experience.",
         accent: false,
     },
     {
-        icon: Users,
-        title: "Plan Effective Meetings",
+        icon: PartyPopper,
+        title: "Let Us Take Care of the Festivities",
         description:
-            "We coordinate timelines, logistics, and execution to ensure seamless and stress-free event planning.",
+            "Sit back and relax while our team handles every detail — décor, coordination, and execution — to deliver an event that exceeds your expectations.",
         accent: false,
     },
 ];
@@ -55,10 +55,11 @@ const ProcessWalker = ({ aboutText }: ProcessWalkerProps) => {
                                 className="group flex bg-white items-start p-6 rounded-lg cursor-default transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#7CB7CA]/10"
                             >
                                 <div
-                                    className={`p-4 rounded-lg mr-5 shrink-0 transition-all duration-300 ${card.accent
+                                    className={`p-4 rounded-lg mr-5 shrink-0 transition-all duration-300 ${
+                                        card.accent
                                             ? "bg-[#7CB7CA] text-white shadow-md group-hover:bg-[#2C5F72]"
                                             : "bg-white text-[#2C5F72] border-2 border-[#2C5F72] group-hover:bg-[#2C5F72] group-hover:text-white"
-                                        }`}
+                                    }`}
                                 >
                                     <Icon size={30} strokeWidth={1.5} />
                                 </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 const SERVICES = [
     {
@@ -9,8 +8,8 @@ const SERVICES = [
         title: "Corporate Galas",
     },
     {
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.06 PM.jpeg",
-        title: "Signature Weddings",
+        image: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM (1).jpeg",
+        title: "Birthday Parties",
     },
     {
         image: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM.jpeg",

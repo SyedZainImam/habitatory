@@ -5,15 +5,19 @@ import React, { useState, useEffect, useCallback } from "react";
 const SLIDES = [
     {
         image: "/images/WhatsApp Image 2026-02-17 at 11.32.07 PM.jpeg",
+        caption: "Elegant Corporate Galas That Inspire",
     },
     {
         image: "/images/WhatsApp Image 2026-02-17 at 11.32.06 PM (1).jpeg",
+        caption: "Unforgettable Birthday Celebrations",
     },
     {
         image: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM.jpeg",
+        caption: "Intimate Private Soirées With Style",
     },
     {
         image: "/images/WhatsApp Image 2026-02-17 at 11.32.09 PM.jpeg",
+        caption: "Bespoke Themes Crafted to Perfection",
     },
 ];
 
@@ -61,24 +65,29 @@ const HeroWalker = ({ tagline, companyName }: HeroWalkerProps) => {
             {/* Dark Overlay */}
             <div className="absolute inset-0 bg-black/40" />
 
-            {/* Hero Content */}
+            {/* Slide Caption */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+                <div className="relative overflow-hidden py-4">
+                    {SLIDES.map((slide, index) => (
+                        <p
+                            key={index}
+                            className={`text-white text-2xl md:text-4xl lg:text-5xl italic tracking-wide drop-shadow-lg transition-all duration-700 ease-in-out ${
+                                index === current
+                                    ? "opacity-100 translate-y-0 relative"
+                                    : "opacity-0 translate-y-4 absolute inset-0"
+                            }`}
+                            style={{ fontFamily: "var(--font-heading)" }}
+                        >
+                            {slide.caption}
+                        </p>
+                    ))}
+                </div>
+
+                <div className="w-20 h-px bg-[#d4af37] mt-6 mb-4" />
+
                 <p
-                    className="text-[#d4af37] text-sm md:text-base tracking-[0.3em] uppercase mb-4 font-medium"
+                    className="text-[#d4af37] text-sm md:text-base tracking-[0.3em] uppercase font-medium"
                     style={{ fontFamily: "var(--font-body)" }}
-                >
-                    Welcome to
-                </p>
-                <h1
-                    className="text-white text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 drop-shadow-2xl"
-                    style={{ fontFamily: "var(--font-heading)" }}
-                >
-                    {companyName?.toUpperCase() || "HABITATORY"}
-                </h1>
-                <div className="w-20 h-px bg-[#d4af37] mb-6" />
-                <p
-                    className="text-white/90 text-lg md:text-xl lg:text-2xl italic tracking-wide drop-shadow-lg"
-                    style={{ fontFamily: "var(--font-heading)" }}
                 >
                     {tagline || "From Celebrations to Creations"}
                 </p>
@@ -90,10 +99,11 @@ const HeroWalker = ({ tagline, companyName }: HeroWalkerProps) => {
                             key={index}
                             onClick={() => goToSlide(index)}
                             aria-label={`Go to slide ${index + 1}`}
-                            className={`transition-all duration-300 rounded-full ${index === current
+                            className={`transition-all duration-300 rounded-full ${
+                                index === current
                                     ? "w-10 h-2 bg-[#d4af37]"
                                     : "w-2 h-2 bg-white/50 hover:bg-white/80"
-                                }`}
+                            }`}
                         />
                     ))}
                 </div>

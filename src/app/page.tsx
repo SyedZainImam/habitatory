@@ -26,7 +26,7 @@ export default async function Home() {
       {/* Testimonials Section */}
       <Testimonials />
 
-      <FooterWalker settings={settings} />
+      <FooterWalker />
     </main>
   );
 }

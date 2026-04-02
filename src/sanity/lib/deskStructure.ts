@@ -38,6 +38,11 @@ export const deskStructure = (S: StructureBuilder) =>
                 .schemaType("heroSlide")
                 .child(S.documentTypeList("heroSlide").title("Hero Slides")),
 
+            S.listItem()
+                .title("Products")
+                .schemaType("product")
+                .child(S.documentTypeList("product").title("Products")),
+
             S.divider(),
 
             // Inbox

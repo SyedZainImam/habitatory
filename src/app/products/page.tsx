@@ -4,6 +4,8 @@ import Link from "next/link";
 import HeaderWalker from "@/components/themes/walker/HeaderWalker";
 import FooterWalker from "@/components/themes/walker/FooterWalker";
 import { ArrowRight } from "lucide-react";
+import { client } from "@/sanity/lib/client";
+import { ALL_PRODUCTS_QUERY } from "@/sanity/lib/queries";
 
 export const metadata = {
     title: "Products — Habitatory",
@@ -11,10 +13,24 @@ export const metadata = {
         "Explore Habitatory's premium products — custom backdrops for stunning event settings and photograph binders to preserve your treasured memories.",
 };
 
-const PRODUCTS = [
+// Revalidate every 60 seconds so new Sanity edits appear quickly
+export const revalidate = 60;
+
+type Product = {
+    _id: string;
+    title: string;
+    imageUrl: string;
+    description: string;
+    features: string[];
+    order: number;
+};
+
+// Hardcoded fallback products shown when no products exist in Sanity yet
+const FALLBACK_PRODUCTS: Product[] = [
     {
+        _id: "fallback-1",
         title: "Custom Backdrops",
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM.jpeg",
+        imageUrl: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM.jpeg",
         description:
             "Transform any space into a breathtaking scene with our bespoke backdrops. From elegant floral walls and shimmering sequin panels to hand-painted murals and custom-printed designs, each backdrop is crafted to match your event's unique theme and colour palette.",
         features: [
@@ -24,10 +40,12 @@ const PRODUCTS = [
             "Fabric draping & curtain backdrops",
             "Themed stage designs",
         ],
+        order: 0,
     },
     {
+        _id: "fallback-2",
         title: "Photograph Binders",
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.07 PM (1).jpeg",
+        imageUrl: "/images/WhatsApp Image 2026-02-17 at 11.32.07 PM (1).jpeg",
         description:
             "Preserve your most treasured moments in our luxurious photograph binders. Each binder is carefully crafted with premium materials, offering an elegant and timeless way to relive the magic of your celebration for years to come.",
         features: [
@@ -37,10 +55,16 @@ const PRODUCTS = [
             "Multiple size options",
             "Gift-ready packaging",
         ],
+        order: 1,
     },
 ];
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+    const products: Product[] = await client.fetch(ALL_PRODUCTS_QUERY);
+
+    // Use Sanity data if available, otherwise show fallback products
+    const displayProducts = products && products.length > 0 ? products : FALLBACK_PRODUCTS;
+
     return (
         <main className="min-h-screen bg-white">
             <HeaderWalker />
@@ -72,9 +96,9 @@ export default function ProductsPage() {
             {/* Products */}
             <section className="py-24 px-6 md:px-8">
                 <div className="max-w-6xl mx-auto space-y-24">
-                    {PRODUCTS.map((product, index) => (
+                    {displayProducts.map((product, index) => (
                         <div
-                            key={index}
+                            key={product._id}
                             className={`flex flex-col ${
                                 index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                             } gap-10 md:gap-16 items-center`}
@@ -83,7 +107,7 @@ export default function ProductsPage() {
                             <div className="w-full md:w-1/2">
                                 <div className="relative w-full h-80 md:h-[420px] rounded-xl overflow-hidden shadow-xl">
                                     <Image
-                                        src={product.image}
+                                        src={product.imageUrl}
                                         alt={product.title}
                                         fill
                                         className="object-cover"
@@ -105,17 +129,19 @@ export default function ProductsPage() {
                                     {product.description}
                                 </p>
 
-                                <ul className="space-y-3 mb-8">
-                                    {product.features.map((feature, i) => (
-                                        <li
-                                            key={i}
-                                            className="flex items-center gap-3 text-sm text-zinc-600"
-                                        >
-                                            <span className="w-2 h-2 rounded-full bg-[#d4af37] shrink-0" />
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
+                                {product.features && product.features.length > 0 && (
+                                    <ul className="space-y-3 mb-8">
+                                        {product.features.map((feature, i) => (
+                                            <li
+                                                key={i}
+                                                className="flex items-center gap-3 text-sm text-zinc-600"
+                                            >
+                                                <span className="w-2 h-2 rounded-full bg-[#d4af37] shrink-0" />
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
 
                                 <Link
                                     href="/#contact"

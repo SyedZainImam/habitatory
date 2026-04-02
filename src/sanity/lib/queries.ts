@@ -71,6 +71,17 @@ export const ALL_HERO_SLIDES_QUERY = `*[_type == "heroSlide"] | order(order asc)
   order
 }`;
 
+// ─── Products ───────────────────────────────────────────
+export const ALL_PRODUCTS_QUERY = `*[_type == "product"] | order(order asc) {
+  _id,
+  title,
+  "imageUrl": image.asset->url,
+  image,
+  description,
+  features,
+  order
+}`;
+
 // ─── Site Settings (singleton) ──────────────────────────
 export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {
   companyName,

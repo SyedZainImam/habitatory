@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -18,6 +19,7 @@ const HeaderWalker = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("home");
+    const pathname = usePathname();
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 40);
@@ -72,10 +74,7 @@ const HeaderWalker = () => {
         if (item.type === "anchor") {
             return activeSection === item.href.replace("/#", "");
         }
-        if (typeof window !== "undefined") {
-            return window.location.pathname === item.href;
-        }
-        return false;
+        return pathname === item.href;
     };
 
     return (

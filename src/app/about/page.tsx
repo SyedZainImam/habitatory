@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import HeaderWalker from "@/components/themes/walker/HeaderWalker";
 import FooterWalker from "@/components/themes/walker/FooterWalker";
@@ -9,6 +8,11 @@ export const metadata = {
     title: "About Us — Habitatory",
     description:
         "Learn about Habitatory — a passionate team dedicated to crafting unforgettable events. From corporate galas to birthday parties, we transform your vision into reality.",
+    openGraph: {
+        title: "About Us — Habitatory",
+        description:
+            "A passionate team dedicated to crafting unforgettable events.",
+    },
 };
 
 const VALUES = [
@@ -80,7 +84,7 @@ export default function AboutPage() {
 
                     <div className="space-y-6 text-zinc-600 text-base md:text-lg leading-relaxed text-left">
                         <p>
-                            At Habitatory, we believe that every event tells a story — and it's our
+                            At Habitatory, we believe that every event tells a story — and it&apos;s our
                             passion to make that story unforgettable. Born from a love for
                             creativity and an obsession with detail, Habitatory was founded with a
                             singular mission: to transform ordinary moments into extraordinary
@@ -88,13 +92,13 @@ export default function AboutPage() {
                         </p>
                         <p>
                             Our journey began with a simple idea — that celebrations should be as
-                            unique as the people behind them. Whether it's a sparkling corporate
+                            unique as the people behind them. Whether it&apos;s a sparkling corporate
                             gala, an intimate birthday gathering, or an elegant private soirée, we
                             approach each event as a one-of-a-kind experience deserving of the
                             highest craft and care.
                         </p>
                         <p>
-                            What sets us apart is our deeply personal approach. We don't believe in
+                            What sets us apart is our deeply personal approach. We don&apos;t believe in
                             templates or cookie-cutter solutions. Instead, we sit down with every
                             client, listen to their dreams, and work tirelessly to bring those
                             visions to life — down to the last petal, the last note of music, and
@@ -161,7 +165,7 @@ export default function AboutPage() {
                         Ready to Create Something Extraordinary?
                     </h2>
                     <p className="text-teal-100/80 text-base md:text-lg mb-8 max-w-2xl mx-auto">
-                        Let's turn your vision into a celebration that you and your guests
+                        Let&apos;s turn your vision into a celebration that you and your guests
                         will remember forever.
                     </p>
                     <Link

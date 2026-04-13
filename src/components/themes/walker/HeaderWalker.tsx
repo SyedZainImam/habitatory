@@ -18,8 +18,9 @@ const NAV_ITEMS = [
 const HeaderWalker = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [activeSection, setActiveSection] = useState("home");
+    const [activeSection, setActiveSection] = useState<string | null>(null);
     const pathname = usePathname();
+    const isHomePage = pathname === "/";
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 40);
@@ -27,8 +28,13 @@ const HeaderWalker = () => {
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // Intersection Observer for active section (only for anchor links on the home page)
+    // Intersection Observer for active section (only on the home page)
     useEffect(() => {
+        if (!isHomePage) {
+            setActiveSection(null);
+            return;
+        }
+
         const anchorIds = NAV_ITEMS
             .filter((n) => n.type === "anchor")
             .map((n) => n.href.replace("/#", ""));
@@ -49,7 +55,7 @@ const HeaderWalker = () => {
         });
 
         return () => observer.disconnect();
-    }, []);
+    }, [isHomePage]);
 
     const handleNavClick = useCallback(
         (e: React.MouseEvent<HTMLAnchorElement>, item: typeof NAV_ITEMS[0]) => {
@@ -71,10 +77,14 @@ const HeaderWalker = () => {
     );
 
     const isActive = (item: typeof NAV_ITEMS[0]) => {
-        if (item.type === "anchor") {
+        if (item.type === "page") {
+            return pathname === item.href;
+        }
+        // Anchor links are only active when on the home page
+        if (isHomePage && activeSection) {
             return activeSection === item.href.replace("/#", "");
         }
-        return pathname === item.href;
+        return false;
     };
 
     return (

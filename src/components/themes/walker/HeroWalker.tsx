@@ -26,7 +26,7 @@ interface HeroWalkerProps {
     companyName?: string;
 }
 
-const HeroWalker = ({ tagline, companyName }: HeroWalkerProps) => {
+const HeroWalker = ({ tagline }: HeroWalkerProps) => {
     const [current, setCurrent] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
 

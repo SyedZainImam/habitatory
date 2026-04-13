@@ -8,7 +8,6 @@ import ServicesWalker from "@/components/themes/walker/ServicesWalker";
 import SpecialtiesWalker from "@/components/themes/walker/SpecialtiesWalker";
 import FooterWalker from "@/components/themes/walker/FooterWalker";
 
-import EventGallery from "@/components/EventGallery";
 import Testimonials from "@/components/Testimonials";
 import { getSiteSettings } from "@/sanity/lib/fetchers";
 

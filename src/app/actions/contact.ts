@@ -1,5 +1,8 @@
 "use server";
 
+import { headers } from "next/headers";
+import { rateLimit } from "@/app/lib/rate-limit";
+
 export interface ContactFormState {
     success: boolean;
     message: string;
@@ -9,6 +12,17 @@ export async function submitContactForm(
     _prevState: ContactFormState | null,
     formData: FormData
 ): Promise<ContactFormState> {
+    // Rate limiting
+    const headersList = await headers();
+    const ip = headersList.get("x-forwarded-for") ?? "unknown";
+    const { allowed } = rateLimit(ip);
+    if (!allowed) {
+        return {
+            success: false,
+            message: "Too many submissions. Please wait a minute and try again.",
+        };
+    }
+
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const phone = formData.get("phone") as string;
@@ -37,9 +51,9 @@ export async function submitContactForm(
         const { createClient } = await import("next-sanity");
 
         const writeClient = createClient({
-            projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "heqhq5w1",
-            dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
-            apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2024-01-01",
+            projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+            dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+            apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
             token: process.env.SANITY_API_WRITE_TOKEN,
             useCdn: false,
         });
@@ -58,8 +72,7 @@ export async function submitContactForm(
             success: true,
             message: "Thank you! Your message has been sent. We'll get back to you soon.",
         };
-    } catch (error) {
-        console.error("Contact form submission error:", error);
+    } catch {
         return {
             success: false,
             message: "Something went wrong. Please try again later.",

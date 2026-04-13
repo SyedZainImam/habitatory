@@ -11,6 +11,11 @@ export const metadata = {
     title: "Products — Habitatory",
     description:
         "Explore Habitatory's premium products — custom backdrops for stunning event settings and photograph binders to preserve your treasured memories.",
+    openGraph: {
+        title: "Products — Habitatory",
+        description:
+            "Premium custom backdrops and photograph binders to elevate your celebrations.",
+    },
 };
 
 // Revalidate every 60 seconds so new Sanity edits appear quickly

@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import HeaderWalker from "@/components/themes/walker/HeaderWalker";
 import FooterWalker from "@/components/themes/walker/FooterWalker";
-import { getAllEvents } from "@/sanity/lib/fetchers";
+import { getAllEvents, getSiteSettings } from "@/sanity/lib/fetchers";
 import type { Event } from "@/sanity/lib/types";
 
 export const metadata = {
@@ -18,49 +18,6 @@ export const metadata = {
 
 export const revalidate = 60;
 
-const FALLBACK_IMAGES = [
-    {
-        src: "/images/WhatsApp Image 2026-02-17 at 11.32.06 PM (1).jpeg",
-        title: "Annual Corporate Gala",
-        category: "Corporate",
-    },
-    {
-        src: "/images/WhatsApp Image 2026-02-17 at 11.32.06 PM.jpeg",
-        title: "Sunset Rooftop Celebration",
-        category: "Private Soirée",
-    },
-    {
-        src: "/images/WhatsApp Image 2026-02-17 at 11.32.07 PM (1).jpeg",
-        title: "Golden Anniversary Dinner",
-        category: "Birthday Party",
-    },
-    {
-        src: "/images/WhatsApp Image 2026-02-17 at 11.32.07 PM.jpeg",
-        title: "Enchanted Garden Party",
-        category: "Private Soirée",
-    },
-    {
-        src: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM (1).jpeg",
-        title: "Executive Awards Night",
-        category: "Corporate",
-    },
-    {
-        src: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM.jpeg",
-        title: "Elegant Milestone Birthday",
-        category: "Birthday Party",
-    },
-    {
-        src: "/images/WhatsApp Image 2026-02-17 at 11.32.09 PM (1).jpeg",
-        title: "Charity Fundraiser Gala",
-        category: "Corporate",
-    },
-    {
-        src: "/images/WhatsApp Image 2026-02-17 at 11.32.09 PM.jpeg",
-        title: "Intimate Candle-Lit Soirée",
-        category: "Private Soirée",
-    },
-];
-
 const CATEGORY_MAP: Record<string, string> = {
     corporate: "Corporate",
     wedding: "Wedding",
@@ -72,10 +29,11 @@ export default async function GalleryPage() {
     try {
         events = await getAllEvents();
     } catch {
-        // Fall back to static images on error
+        // Will show empty state
     }
 
-    const useSanity = events.length > 0;
+    const settings = await getSiteSettings();
+    const heroImageUrl = settings?.galleryHeroImageUrl;
 
     return (
         <main className="min-h-screen bg-white">
@@ -83,13 +41,14 @@ export default async function GalleryPage() {
 
             {/* Hero Banner */}
             <section className="relative w-full h-[40vh] min-h-[320px] overflow-hidden">
-                <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{
-                        backgroundImage:
-                            "url('/images/WhatsApp Image 2026-02-17 at 11.32.09 PM.jpeg')",
-                    }}
-                />
+                {heroImageUrl ? (
+                    <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url('${heroImageUrl}')` }}
+                    />
+                ) : (
+                    <div className="absolute inset-0 bg-[#1a3c47]" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#1a3c47]/80 to-[#1a3c47]/60" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
                     <h1
@@ -108,75 +67,50 @@ export default async function GalleryPage() {
             {/* Gallery Grid */}
             <section className="py-24 px-6 md:px-8">
                 <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {useSanity
-                            ? events.map((event) => (
-                                  <div
-                                      key={event._id}
-                                      className="group relative overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
-                                  >
-                                      <div className="relative w-full h-72">
-                                          {event.coverImageUrl ? (
-                                              <Image
-                                                  src={event.coverImageUrl}
-                                                  alt={event.title}
-                                                  fill
-                                                  className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                                              />
-                                          ) : (
-                                              <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-zinc-400">
-                                                  No Image
-                                              </div>
-                                          )}
-                                      </div>
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                      <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                          <span className="text-[#d4af37] text-xs font-semibold tracking-wider uppercase">
-                                              {CATEGORY_MAP[event.category] || event.category}
-                                          </span>
-                                          <h3
-                                              className="text-white font-bold text-lg mt-1"
-                                              style={{ fontFamily: "var(--font-heading)" }}
-                                          >
-                                              {event.title}
-                                          </h3>
-                                      </div>
-                                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-[#2C5F72] shadow-sm group-hover:opacity-0 transition-opacity duration-300 capitalize">
-                                          {CATEGORY_MAP[event.category] || event.category}
-                                      </div>
-                                  </div>
-                              ))
-                            : FALLBACK_IMAGES.map((img, index) => (
-                                  <div
-                                      key={index}
-                                      className="group relative overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
-                                  >
-                                      <div className="relative w-full h-72">
-                                          <Image
-                                              src={img.src}
-                                              alt={img.title}
-                                              fill
-                                              className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                                          />
-                                      </div>
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                      <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                          <span className="text-[#d4af37] text-xs font-semibold tracking-wider uppercase">
-                                              {img.category}
-                                          </span>
-                                          <h3
-                                              className="text-white font-bold text-lg mt-1"
-                                              style={{ fontFamily: "var(--font-heading)" }}
-                                          >
-                                              {img.title}
-                                          </h3>
-                                      </div>
-                                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-[#2C5F72] shadow-sm group-hover:opacity-0 transition-opacity duration-300">
-                                          {img.category}
-                                      </div>
-                                  </div>
-                              ))}
-                    </div>
+                    {events.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {events.map((event) => (
+                                <div
+                                    key={event._id}
+                                    className="group relative overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
+                                >
+                                    <div className="relative w-full h-72">
+                                        {event.coverImageUrl ? (
+                                            <Image
+                                                src={event.coverImageUrl}
+                                                alt={event.title}
+                                                fill
+                                                className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-zinc-400">
+                                                No Image
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                        <span className="text-[#d4af37] text-xs font-semibold tracking-wider uppercase">
+                                            {CATEGORY_MAP[event.category] || event.category}
+                                        </span>
+                                        <h3
+                                            className="text-white font-bold text-lg mt-1"
+                                            style={{ fontFamily: "var(--font-heading)" }}
+                                        >
+                                            {event.title}
+                                        </h3>
+                                    </div>
+                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-[#2C5F72] shadow-sm group-hover:opacity-0 transition-opacity duration-300 capitalize">
+                                        {CATEGORY_MAP[event.category] || event.category}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="w-full py-20 text-center bg-[#faf8f5] text-zinc-400 rounded-xl">
+                            <p className="font-medium text-lg">No events found yet. Add some in the Sanity dashboard!</p>
+                        </div>
+                    )}
                 </div>
             </section>
 

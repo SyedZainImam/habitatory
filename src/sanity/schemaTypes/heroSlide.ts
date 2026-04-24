@@ -21,6 +21,12 @@ export const heroSlideType = defineType({
             validation: (rule) => rule.required(),
         }),
         defineField({
+            name: "caption",
+            title: "Caption",
+            type: "string",
+            description: "Caption text displayed over the slide",
+        }),
+        defineField({
             name: "order",
             title: "Display Order",
             type: "number",

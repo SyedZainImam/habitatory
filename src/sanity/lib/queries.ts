@@ -43,11 +43,14 @@ export const EVENTS_BY_CATEGORY_QUERY = `*[_type == "event" && category == $cate
 }`;
 
 // ─── Services ───────────────────────────────────────────
-export const ALL_SERVICES_QUERY = `*[_type == "service"] | order(_createdAt asc) {
+export const ALL_SERVICES_QUERY = `*[_type == "service"] | order(order asc, _createdAt asc) {
   _id,
   title,
   description,
-  icon
+  icon,
+  "imageUrl": image.asset->url,
+  image,
+  order
 }`;
 
 // ─── Testimonials ───────────────────────────────────────
@@ -66,6 +69,7 @@ export const ALL_TESTIMONIALS_QUERY = `*[_type == "testimonial"] | order(_create
 export const ALL_HERO_SLIDES_QUERY = `*[_type == "heroSlide"] | order(order asc) {
   _id,
   title,
+  caption,
   "imageUrl": image.asset->url,
   image,
   order
@@ -90,5 +94,8 @@ export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {
   phone,
   address,
   socialLinks,
-  aboutText
+  aboutText,
+  "aboutHeroImageUrl": aboutHeroImage.asset->url,
+  "galleryHeroImageUrl": galleryHeroImage.asset->url,
+  "productsHeroImageUrl": productsHeroImage.asset->url
 }`;

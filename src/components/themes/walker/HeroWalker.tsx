@@ -1,34 +1,19 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-
-const SLIDES = [
-    {
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.07 PM.jpeg",
-        caption: "Elegant Corporate Galas That Inspire",
-    },
-    {
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.06 PM (1).jpeg",
-        caption: "Unforgettable Birthday Celebrations",
-    },
-    {
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM.jpeg",
-        caption: "Intimate Private Soirées With Style",
-    },
-    {
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.09 PM.jpeg",
-        caption: "Bespoke Themes Crafted to Perfection",
-    },
-];
+import type { HeroSlide } from "@/sanity/lib/types";
 
 interface HeroWalkerProps {
     tagline?: string;
     companyName?: string;
+    slides?: HeroSlide[];
 }
 
-const HeroWalker = ({ tagline }: HeroWalkerProps) => {
+const HeroWalker = ({ tagline, slides = [] }: HeroWalkerProps) => {
     const [current, setCurrent] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
+
+    const slideCount = slides.length;
 
     const goToSlide = useCallback(
         (index: number) => {
@@ -42,21 +27,44 @@ const HeroWalker = ({ tagline }: HeroWalkerProps) => {
 
     // Auto-rotate
     useEffect(() => {
+        if (slideCount === 0) return;
         const timer = setInterval(() => {
-            setCurrent((prev) => (prev + 1) % SLIDES.length);
+            setCurrent((prev) => (prev + 1) % slideCount);
         }, 4000);
         return () => clearInterval(timer);
-    }, []);
+    }, [slideCount]);
+
+    if (slideCount === 0) {
+        return (
+            <section id="home" className="relative w-full h-[85vh] min-h-[600px] overflow-hidden bg-[#1a3c47]">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+                    <p
+                        className="text-[#d4af37] text-sm md:text-base tracking-[0.3em] uppercase font-medium"
+                        style={{ fontFamily: "var(--font-body)" }}
+                    >
+                        {tagline || "From Celebrations to Creations"}
+                    </p>
+                </div>
+                <div
+                    className="absolute bottom-0 left-0 w-full h-[120px] bg-white z-10"
+                    style={{
+                        clipPath: "polygon(0 100%, 100% 100%, 100% 30%, 0 0%)",
+                        transform: "translateY(1px)",
+                    }}
+                />
+            </section>
+        );
+    }
 
     return (
         <section id="home" className="relative w-full h-[85vh] min-h-[600px] overflow-hidden">
             {/* Background Images with Fade */}
-            {SLIDES.map((slide, index) => (
+            {slides.map((slide, index) => (
                 <div
-                    key={index}
+                    key={slide._id}
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[1200ms] ease-in-out"
                     style={{
-                        backgroundImage: `url('${slide.image}')`,
+                        backgroundImage: slide.imageUrl ? `url('${slide.imageUrl}')` : undefined,
                         opacity: index === current ? 1 : 0,
                     }}
                 />
@@ -68,9 +76,9 @@ const HeroWalker = ({ tagline }: HeroWalkerProps) => {
             {/* Slide Caption */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
                 <div className="relative overflow-hidden py-4">
-                    {SLIDES.map((slide, index) => (
+                    {slides.map((slide, index) => (
                         <p
-                            key={index}
+                            key={slide._id}
                             className={`text-white text-2xl md:text-4xl lg:text-5xl italic tracking-wide drop-shadow-lg transition-all duration-700 ease-in-out ${
                                 index === current
                                     ? "opacity-100 translate-y-0 relative"
@@ -78,7 +86,7 @@ const HeroWalker = ({ tagline }: HeroWalkerProps) => {
                             }`}
                             style={{ fontFamily: "var(--font-heading)" }}
                         >
-                            {slide.caption}
+                            {slide.caption || slide.title || ""}
                         </p>
                     ))}
                 </div>
@@ -94,9 +102,9 @@ const HeroWalker = ({ tagline }: HeroWalkerProps) => {
 
                 {/* Carousel Dots */}
                 <div className="flex gap-3 mt-16">
-                    {SLIDES.map((_, index) => (
+                    {slides.map((slide, index) => (
                         <button
-                            key={index}
+                            key={slide._id}
                             onClick={() => goToSlide(index)}
                             aria-label={`Go to slide ${index + 1}`}
                             className={`transition-all duration-300 rounded-full ${

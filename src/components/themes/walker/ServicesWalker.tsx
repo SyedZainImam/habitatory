@@ -1,23 +1,17 @@
 "use client";
 
 import React from "react";
+import type { Service } from "@/sanity/lib/types";
 
-const SERVICES = [
-    {
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.06 PM (1).jpeg",
-        title: "Corporate Galas",
-    },
-    {
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM (1).jpeg",
-        title: "Birthday Parties",
-    },
-    {
-        image: "/images/WhatsApp Image 2026-02-17 at 11.32.08 PM.jpeg",
-        title: "Private Soirées",
-    },
-];
+interface ServicesWalkerProps {
+    services?: Service[];
+}
 
-const ServicesWalker = () => {
+const ServicesWalker = ({ services = [] }: ServicesWalkerProps) => {
+    if (services.length === 0) {
+        return null;
+    }
+
     return (
         <section id="events" className="relative w-full overflow-hidden bg-[#2C5F72] pb-32">
             {/* Slanted Top Edge */}
@@ -43,15 +37,21 @@ const ServicesWalker = () => {
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-8">
-                    {SERVICES.map((service, index) => (
+                    {services.map((service) => (
                         <div
-                            key={index}
+                            key={service._id}
                             className="group relative w-full h-72 overflow-hidden rounded-lg shadow-xl cursor-pointer"
                         >
-                            <div
-                                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                                style={{ backgroundImage: `url('${service.image}')` }}
-                            />
+                            {service.imageUrl ? (
+                                <div
+                                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                    style={{ backgroundImage: `url('${service.imageUrl}')` }}
+                                />
+                            ) : (
+                                <div className="absolute inset-0 bg-[#1a3c47] flex items-center justify-center text-white/30 text-sm">
+                                    No Image
+                                </div>
+                            )}
                             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
                             <div className="absolute bottom-0 left-0 w-full p-5 flex justify-center bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                                 <h3

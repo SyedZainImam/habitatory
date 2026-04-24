@@ -32,6 +32,9 @@ export interface Service {
     title: string;
     description: string;
     icon?: string;
+    imageUrl?: string;
+    image?: SanityImageSource;
+    order?: number;
 }
 
 export interface Testimonial {
@@ -48,6 +51,7 @@ export interface Testimonial {
 export interface HeroSlide {
     _id: string;
     title?: string;
+    caption?: string;
     imageUrl?: string;
     image?: SanityImageSource;
     order: number;
@@ -65,4 +69,7 @@ export interface SiteSettings {
         linkedin?: string;
     };
     aboutText?: string;
+    aboutHeroImageUrl?: string;
+    galleryHeroImageUrl?: string;
+    productsHeroImageUrl?: string;
 }

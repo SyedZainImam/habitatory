@@ -64,6 +64,27 @@ export const siteSettingsType = defineType({
             rows: 5,
             description: "Main description text shown in the About/Process section",
         }),
+        defineField({
+            name: "aboutHeroImage",
+            title: "About Page Hero Image",
+            type: "image",
+            options: { hotspot: true },
+            description: "Banner image shown at the top of the About page",
+        }),
+        defineField({
+            name: "galleryHeroImage",
+            title: "Gallery Page Hero Image",
+            type: "image",
+            options: { hotspot: true },
+            description: "Banner image shown at the top of the Gallery page",
+        }),
+        defineField({
+            name: "productsHeroImage",
+            title: "Products Page Hero Image",
+            type: "image",
+            options: { hotspot: true },
+            description: "Banner image shown at the top of the Products page",
+        }),
     ],
     preview: {
         prepare() {

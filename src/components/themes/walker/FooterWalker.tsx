@@ -69,6 +69,30 @@ const FooterWalker = async () => {
                                 </span>
                             </div>
                         </div>
+
+                        {/* Social Media Links */}
+                        {socialLinks.length > 0 && (
+                            <div className="mt-8">
+                                <h4 className="text-white/60 text-xs tracking-widest uppercase mb-4">Follow Us</h4>
+                                <div className="flex gap-3">
+                                    {socialLinks.map((social) => {
+                                        const Icon = SOCIAL_ICONS[social.key];
+                                        return (
+                                            <a
+                                                key={social.key}
+                                                href={social.href}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                aria-label={social.label}
+                                                className="w-10 h-10 rounded-full border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all duration-300"
+                                            >
+                                                <Icon size={18} />
+                                            </a>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Column: Contact Form */}

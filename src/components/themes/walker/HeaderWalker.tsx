@@ -104,14 +104,14 @@ const HeaderWalker = () => {
                     >
                         <div
                             className={`relative rounded-lg overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.35)] ${
-                                scrolled ? "w-10 h-10" : "w-12 h-12"
+                                scrolled ? "w-14 h-14" : "w-20 h-20"
                             }`}
                         >
                             <Image
                                 src="/images/3ad81537-283c-45db-bfb8-f423da42d528.png"
                                 alt="Habitatory Logo"
-                                width={48}
-                                height={48}
+                                width={80}
+                                height={80}
                                 className="object-contain"
                                 priority
                             />

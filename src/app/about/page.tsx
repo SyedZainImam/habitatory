@@ -3,6 +3,7 @@ import Link from "next/link";
 import HeaderWalker from "@/components/themes/walker/HeaderWalker";
 import FooterWalker from "@/components/themes/walker/FooterWalker";
 import { Heart, Sparkles, Users, Star, ArrowRight } from "lucide-react";
+import { getSiteSettings } from "@/sanity/lib/fetchers";
 
 export const metadata = {
     title: "About Us — Habitatory",
@@ -42,20 +43,26 @@ const VALUES = [
     },
 ];
 
-export default function AboutPage() {
+export const revalidate = 60;
+
+export default async function AboutPage() {
+    const settings = await getSiteSettings();
+    const heroImageUrl = settings?.aboutHeroImageUrl;
+
     return (
         <main className="min-h-screen bg-white">
             <HeaderWalker />
 
             {/* Hero Banner */}
             <section className="relative w-full h-[50vh] min-h-[400px] overflow-hidden">
-                <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{
-                        backgroundImage:
-                            "url('/images/WhatsApp Image 2026-02-17 at 11.32.07 PM (1).jpeg')",
-                    }}
-                />
+                {heroImageUrl ? (
+                    <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url('${heroImageUrl}')` }}
+                    />
+                ) : (
+                    <div className="absolute inset-0 bg-[#1a3c47]" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#1a3c47]/80 to-[#1a3c47]/60" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
                     <h1

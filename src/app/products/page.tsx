@@ -4,9 +4,7 @@ import Link from "next/link";
 import HeaderWalker from "@/components/themes/walker/HeaderWalker";
 import FooterWalker from "@/components/themes/walker/FooterWalker";
 import { ArrowRight } from "lucide-react";
-import { client } from "@/sanity/lib/client";
-import { ALL_PRODUCTS_QUERY } from "@/sanity/lib/queries";
-import { getSiteSettings } from "@/sanity/lib/fetchers";
+import { getAllProducts, getSiteSettings } from "@/sanity/lib/fetchers";
 
 export const metadata = {
     title: "Products — Habitatory",
@@ -22,18 +20,11 @@ export const metadata = {
 // Revalidate every 60 seconds so new Sanity edits appear quickly
 export const revalidate = 60;
 
-type Product = {
-    _id: string;
-    title: string;
-    imageUrl: string;
-    description: string;
-    features: string[];
-    order: number;
-};
+import type { Product } from "@/sanity/lib/types";
 
 export default async function ProductsPage() {
     const [products, settings] = await Promise.all([
-        client.fetch<Product[]>(ALL_PRODUCTS_QUERY),
+        getAllProducts(),
         getSiteSettings(),
     ]);
 

@@ -57,6 +57,16 @@ export interface HeroSlide {
     order: number;
 }
 
+export interface Product {
+    _id: string;
+    title: string;
+    imageUrl?: string;
+    image?: SanityImageSource;
+    description: string;
+    features: string[];
+    order: number;
+}
+
 export interface SiteSettings {
     companyName: string;
     tagline?: string;
@@ -67,9 +77,17 @@ export interface SiteSettings {
         instagram?: string;
         facebook?: string;
         linkedin?: string;
+        youtube?: string;
+        tiktok?: string;
+        twitter?: string;
+        pinterest?: string;
+        snapchat?: string;
     };
     aboutText?: string;
     aboutHeroImageUrl?: string;
+    aboutHeroImage?: SanityImageSource;
     galleryHeroImageUrl?: string;
+    galleryHeroImage?: SanityImageSource;
     productsHeroImageUrl?: string;
+    productsHeroImage?: SanityImageSource;
 }

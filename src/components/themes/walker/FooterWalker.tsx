@@ -1,22 +1,31 @@
 import React from "react";
-import { Mail, MapPin, Phone, Facebook, Instagram, Linkedin } from "lucide-react";
+import { Mail, MapPin, Phone, Facebook, Instagram, Linkedin, Youtube, Twitter } from "lucide-react";
+import { FaTiktok, FaPinterestP, FaSnapchatGhost } from "react-icons/fa";
 import ContactForm from "@/components/ContactForm";
 import { getSiteSettings } from "@/sanity/lib/fetchers";
 
-const SOCIAL_ICONS = {
-    instagram: Instagram,
-    facebook: Facebook,
-    linkedin: Linkedin,
-} as const;
+type SocialKey = "instagram" | "facebook" | "linkedin" | "youtube" | "tiktok" | "twitter" | "pinterest" | "snapchat";
+
+const SOCIAL_PLATFORMS: { key: SocialKey; label: string; icon: React.ComponentType<{ size?: number; className?: string }> }[] = [
+    { key: "instagram", label: "Instagram", icon: Instagram },
+    { key: "facebook", label: "Facebook", icon: Facebook },
+    { key: "linkedin", label: "LinkedIn", icon: Linkedin },
+    { key: "youtube", label: "YouTube", icon: Youtube },
+    { key: "tiktok", label: "TikTok", icon: FaTiktok },
+    { key: "twitter", label: "Twitter / X", icon: Twitter },
+    { key: "pinterest", label: "Pinterest", icon: FaPinterestP },
+    { key: "snapchat", label: "Snapchat", icon: FaSnapchatGhost },
+];
 
 const FooterWalker = async () => {
     const settings = await getSiteSettings();
 
-    const socialLinks = [
-        { key: "instagram" as const, label: "Instagram", href: settings?.socialLinks?.instagram },
-        { key: "facebook" as const, label: "Facebook", href: settings?.socialLinks?.facebook },
-        { key: "linkedin" as const, label: "LinkedIn", href: settings?.socialLinks?.linkedin },
-    ].filter((link) => link.href);
+    const socialLinks = SOCIAL_PLATFORMS
+        .map((platform) => ({
+            ...platform,
+            href: settings?.socialLinks?.[platform.key],
+        }))
+        .filter((link) => link.href);
 
     return (
         <footer id="contact" className="w-full relative bg-[#1a3c47]">
@@ -74,9 +83,9 @@ const FooterWalker = async () => {
                         {socialLinks.length > 0 && (
                             <div className="mt-8">
                                 <h4 className="text-white/60 text-xs tracking-widest uppercase mb-4">Follow Us</h4>
-                                <div className="flex gap-3">
+                                <div className="flex flex-wrap gap-3">
                                     {socialLinks.map((social) => {
-                                        const Icon = SOCIAL_ICONS[social.key];
+                                        const Icon = social.icon;
                                         return (
                                             <a
                                                 key={social.key}
@@ -107,9 +116,9 @@ const FooterWalker = async () => {
                         &copy; {new Date().getFullYear()} Habitatory. All Rights Reserved.
                     </span>
                     {socialLinks.length > 0 && (
-                        <div className="flex gap-3">
+                        <div className="flex flex-wrap gap-3">
                             {socialLinks.map((social) => {
-                                const Icon = SOCIAL_ICONS[social.key];
+                                const Icon = social.icon;
                                 return (
                                     <a
                                         key={social.key}

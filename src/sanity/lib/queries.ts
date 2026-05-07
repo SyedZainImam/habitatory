@@ -96,6 +96,9 @@ export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {
   socialLinks,
   aboutText,
   "aboutHeroImageUrl": aboutHeroImage.asset->url,
+  aboutHeroImage,
   "galleryHeroImageUrl": galleryHeroImage.asset->url,
-  "productsHeroImageUrl": productsHeroImage.asset->url
+  galleryHeroImage,
+  "productsHeroImageUrl": productsHeroImage.asset->url,
+  productsHeroImage
 }`;

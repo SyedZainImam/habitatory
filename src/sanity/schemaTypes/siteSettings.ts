@@ -39,6 +39,7 @@ export const siteSettingsType = defineType({
             name: "socialLinks",
             title: "Social Media Links",
             type: "object",
+            description: "Add URLs for the social platforms you want to display. Only platforms with a URL will appear on the website.",
             fields: [
                 defineField({
                     name: "instagram",
@@ -53,6 +54,31 @@ export const siteSettingsType = defineType({
                 defineField({
                     name: "linkedin",
                     title: "LinkedIn URL",
+                    type: "url",
+                }),
+                defineField({
+                    name: "youtube",
+                    title: "YouTube URL",
+                    type: "url",
+                }),
+                defineField({
+                    name: "tiktok",
+                    title: "TikTok URL",
+                    type: "url",
+                }),
+                defineField({
+                    name: "twitter",
+                    title: "Twitter / X URL",
+                    type: "url",
+                }),
+                defineField({
+                    name: "pinterest",
+                    title: "Pinterest URL",
+                    type: "url",
+                }),
+                defineField({
+                    name: "snapchat",
+                    title: "Snapchat URL",
                     type: "url",
                 }),
             ],

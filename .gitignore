@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI context file (local reference only)
+AI_PROJECT_CONTEXT.md
+
+# Design reference PDFs (local only)
+*.pdf
+
+# yarn.lock — project uses npm
+yarn.lock

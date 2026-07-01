@@ -54,4 +54,13 @@ export const deskStructure = (S: StructureBuilder) =>
                         .title("Contact Inquiries")
                         .defaultOrdering([{ field: "submittedAt", direction: "desc" }])
                 ),
+
+            S.listItem()
+                .title("Magnet Orders")
+                .schemaType("magnetOrder")
+                .child(
+                    S.documentTypeList("magnetOrder")
+                        .title("Magnet Orders")
+                        .defaultOrdering([{ field: "createdAt", direction: "desc" }])
+                ),
         ]);

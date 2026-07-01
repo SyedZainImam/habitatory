@@ -12,6 +12,7 @@ const NAV_ITEMS = [
     { label: "Our Events", href: "/#events", type: "anchor" },
     { label: "Gallery", href: "/gallery", type: "page" },
     { label: "Products", href: "/products", type: "page" },
+    { label: "Magnets", href: "/magnets", type: "page" },
     { label: "Contact Us", href: "/#contact", type: "anchor" },
 ];
 

@@ -7,7 +7,8 @@ import { heroSlideType } from "./heroSlide";
 import { siteSettingsType } from "./siteSettings";
 import { contactInquiryType } from "./contactInquiry";
 import { productType } from "./product";
+import { magnetOrderType } from "./magnetOrder";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-    types: [eventType, testimonialType, serviceType, heroSlideType, siteSettingsType, contactInquiryType, productType],
+    types: [eventType, testimonialType, serviceType, heroSlideType, siteSettingsType, contactInquiryType, productType, magnetOrderType],
 };

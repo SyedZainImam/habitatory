@@ -50,7 +50,7 @@ export default function PhotoUploader({ rawPhotos, onPhotosChange, onContinue }:
         <div>
             <h2 className="text-2xl font-bold text-[#2C5F72] mb-2">Upload Your 6 Photos</h2>
             <p className="text-gray-600 mb-6 text-sm">
-                Each photo will appear on one magnet. Drag &amp; drop or click each slot to upload.
+                Upload 1–6 photos. Each filled slot becomes one magnet. Empty slots are left blank on the sheet.
             </p>
 
             <div
@@ -113,11 +113,11 @@ export default function PhotoUploader({ rawPhotos, onPhotosChange, onContinue }:
 
             <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-500">
-                    {filledCount} of {totalSlots} photos added
+                    {filledCount} of {totalSlots} slots filled
                 </span>
                 <button
                     onClick={onContinue}
-                    disabled={filledCount < totalSlots}
+                    disabled={filledCount < 1}
                     className="bg-[#2C5F72] text-white px-8 py-3 rounded-lg font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#1a3c47] transition-colors"
                 >
                     Continue to Crop →

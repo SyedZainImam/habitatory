@@ -36,27 +36,35 @@ export default function MagnetOrderFlow({ siteInfo, whatsappPhone }: Props) {
     }
 
     function startCropping() {
-        setState((s) => ({ ...s, step: "crop", cropIndex: 0 }));
+        setState((s) => {
+            const first = s.rawPhotos.findIndex((p) => p !== null);
+            return { ...s, step: "crop", cropIndex: first };
+        });
     }
 
     function handleCropDone(croppedDataUrl: string) {
         setState((s) => {
             const updated = [...s.croppedPhotos];
             updated[s.cropIndex] = croppedDataUrl;
-            const nextIndex = s.cropIndex + 1;
-            if (nextIndex >= TOTAL_PHOTOS) {
+            // Advance to the next slot that has a raw photo
+            let next = s.cropIndex + 1;
+            while (next < TOTAL_PHOTOS && !s.rawPhotos[next]) next++;
+            if (next >= TOTAL_PHOTOS) {
                 return { ...s, croppedPhotos: updated, step: "preview" };
             }
-            return { ...s, croppedPhotos: updated, cropIndex: nextIndex };
+            return { ...s, croppedPhotos: updated, cropIndex: next };
         });
     }
 
     function handleCropBack() {
         setState((s) => {
-            if (s.cropIndex === 0) {
+            // Go back to the previous slot that has a raw photo
+            let prev = s.cropIndex - 1;
+            while (prev >= 0 && !s.rawPhotos[prev]) prev--;
+            if (prev < 0) {
                 return { ...s, step: "upload" };
             }
-            return { ...s, cropIndex: s.cropIndex - 1 };
+            return { ...s, cropIndex: prev };
         });
     }
 
@@ -116,14 +124,22 @@ export default function MagnetOrderFlow({ siteInfo, whatsappPhone }: Props) {
                 {/* ── Step 2: Crop ── */}
                 {state.step === "crop" && (
                     <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-sm p-8">
-                        <PhotoCropper
-                            imageSrc={state.rawPhotos[state.cropIndex]!}
-                            aspectRatio={DEFAULT_TEMPLATE.photoAspectRatio}
-                            photoIndex={state.cropIndex}
-                            totalPhotos={TOTAL_PHOTOS}
-                            onCropDone={handleCropDone}
-                            onBack={handleCropBack}
-                        />
+                        {(() => {
+                            const uploadedIndices = state.rawPhotos
+                                .map((p, i) => (p ? i : -1))
+                                .filter((i) => i >= 0);
+                            const positionInUploaded = uploadedIndices.indexOf(state.cropIndex);
+                            return (
+                                <PhotoCropper
+                                    imageSrc={state.rawPhotos[state.cropIndex]!}
+                                    aspectRatio={DEFAULT_TEMPLATE.photoAspectRatio}
+                                    photoIndex={positionInUploaded}
+                                    totalPhotos={uploadedIndices.length}
+                                    onCropDone={handleCropDone}
+                                    onBack={handleCropBack}
+                                />
+                            );
+                        })()}
                     </div>
                 )}
 

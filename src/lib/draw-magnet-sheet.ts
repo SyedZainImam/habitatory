@@ -4,7 +4,7 @@ export interface MagnetSiteInfo {
     companyName: string;
     email: string;
     website: string;        // e.g. "www.habitatory.ca"
-    instagramHandle: string; // e.g. "habitatory.ca"
+    instagramHandle: string; // e.g. "habitatory_"
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -29,20 +29,20 @@ export async function drawMagnetSheet(
     canvas.height = sheetHeightPx;
     const ctx = canvas.getContext("2d")!;
 
-    // Load photos (only the ones provided)
+    // Load photos
     const photos = await Promise.all(
         croppedPhotoSrcs.map((src) => (src ? loadImage(src) : Promise.resolve(null)))
     );
 
-    // Ensure fonts are loaded
+    // Ensure Playfair Display bold italic is loaded (next/font registers it under the family name)
     try {
-        await document.fonts.load(`bold 60px 'Playfair Display'`);
-        await document.fonts.load(`28px 'Inter'`);
+        await document.fonts.load(`bold italic 60px 'Playfair Display'`);
+        await document.fonts.load(`24px 'Inter'`);
     } catch {
-        // Fall back to system fonts if custom fonts fail
+        // Fall through to system-font fallbacks
     }
 
-    // Sheet background
+    // White sheet background
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, sheetWidthPx, sheetHeightPx);
 
@@ -78,35 +78,35 @@ function drawSingleMagnet(
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(x, y, w, h);
 
-    // Outer border
+    // Outer border (thin, matches reference)
     ctx.strokeStyle = "#1a1a1a";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(x + 1.5, y + 1.5, w - 3, h - 3);
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x + 1, y + 1, w - 2, h - 2);
 
-    // ── Top strip: company name ───────────────────────────────
-    const brandFontSize = Math.round(topStrip * 0.44);
+    // ── Top strip: "Habitatory" — bold italic Playfair Display ──────
+    const brandFontSize = Math.round(topStrip * 0.50);
     ctx.fillStyle = "#2C5F72";
-    ctx.font = `bold ${brandFontSize}px 'Playfair Display', Georgia, serif`;
+    ctx.font = `bold italic ${brandFontSize}px 'Playfair Display', Georgia, serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(info.companyName, x + w / 2, y + topStrip / 2);
 
-    // Thin divider line below top strip
+    // Thin gold divider below title — runs full magnet width
     ctx.strokeStyle = "#d4af37";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(x + leftStrip + 10, y + topStrip);
-    ctx.lineTo(x + w - rightStrip - 10, y + topStrip);
+    ctx.moveTo(x + 8, y + topStrip);
+    ctx.lineTo(x + w - 8, y + topStrip);
     ctx.stroke();
 
-    // ── Photo area ────────────────────────────────────────────
+    // ── Photo area ────────────────────────────────────────────────
     const photoX = x + leftStrip;
     const photoY = y + topStrip;
     const photoW = w - leftStrip - rightStrip;
     const photoH = h - topStrip - botStrip;
 
     if (photo) {
-        // Object-fit: cover — crop to fill the photo slot
+        // Object-fit: cover — fills the slot without stretching
         const srcAR = photo.naturalWidth / photo.naturalHeight;
         const dstAR = photoW / photoH;
         let sx = 0, sy = 0, sw = photo.naturalWidth, sh = photo.naturalHeight;
@@ -118,70 +118,50 @@ function drawSingleMagnet(
             sy = (photo.naturalHeight - sh) / 2;
         }
         ctx.drawImage(photo, sx, sy, sw, sh, photoX, photoY, photoW, photoH);
+
+        // Thin inner photo border (matches reference)
+        ctx.strokeStyle = "#555555";
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(photoX, photoY, photoW, photoH);
     } else {
-        ctx.fillStyle = "#ddeef5";
+        // Empty slot placeholder
+        ctx.fillStyle = "#f2f5f7";
         ctx.fillRect(photoX, photoY, photoW, photoH);
-        ctx.fillStyle = "#aaccdd";
-        ctx.font = `${Math.round(photoH * 0.08)}px 'Inter', Arial, sans-serif`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("Photo", photoX + photoW / 2, photoY + photoH / 2);
+        ctx.strokeStyle = "#cccccc";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(photoX, photoY, photoW, photoH);
     }
 
-    // Thin divider line above bottom strip
-    ctx.strokeStyle = "#d4af37";
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(x + leftStrip + 10, y + h - botStrip);
-    ctx.lineTo(x + w - rightStrip - 10, y + h - botStrip);
-    ctx.stroke();
-
-    // ── Left strip: email (rotated -90°) ──────────────────────
-    const sideFontSize = Math.round(leftStrip * 0.23);
+    // ── Left strip: ✉ email (rotated −90°) ───────────────────────
+    const sideFontSize = Math.round(leftStrip * 0.22);
     ctx.save();
     ctx.translate(x + leftStrip / 2, y + h / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.fillStyle = "#333333";
+    ctx.fillStyle = "#444444";
     ctx.font = `${sideFontSize}px 'Inter', Arial, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(`✉ ${info.email}`, 0, 0); // ✉
+    ctx.fillText(`✉ ${info.email}`, 0, 0); // ✉ envelope
     ctx.restore();
 
-    // Thin left-strip divider
-    ctx.strokeStyle = "#eeeeee";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x + leftStrip, y + topStrip);
-    ctx.lineTo(x + leftStrip, y + h - botStrip);
-    ctx.stroke();
-
-    // ── Right strip: website (rotated +90°) ───────────────────
+    // ── Right strip: + website (rotated +90°) ────────────────────
     ctx.save();
     ctx.translate(x + w - rightStrip / 2, y + h / 2);
     ctx.rotate(Math.PI / 2);
-    ctx.fillStyle = "#333333";
+    ctx.fillStyle = "#444444";
     ctx.font = `${sideFontSize}px 'Inter', Arial, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(`⌖ ${info.website}`, 0, 0); // ⌖ as globe alternative
+    ctx.fillText(`+ ${info.website}`, 0, 0); // "+" matches reference template
     ctx.restore();
 
-    // Thin right-strip divider
-    ctx.strokeStyle = "#eeeeee";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x + w - rightStrip, y + topStrip);
-    ctx.lineTo(x + w - rightStrip, y + h - botStrip);
-    ctx.stroke();
-
-    // ── Bottom strip: Instagram ────────────────────────────────
-    const botFontSize = Math.round(botStrip * 0.34);
-    ctx.fillStyle = "#333333";
+    // ── Bottom strip: © instagram handle ─────────────────────────
+    const botFontSize = Math.round(botStrip * 0.36);
+    ctx.fillStyle = "#444444";
     ctx.font = `${botFontSize}px 'Inter', Arial, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(`◎ ${info.instagramHandle}`, x + w / 2, y + h - botStrip / 2); // ◎
+    ctx.fillText(`© ${info.instagramHandle}`, x + w / 2, y + h - botStrip / 2); // ©
 }
 
 export async function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {

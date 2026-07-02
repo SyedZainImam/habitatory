@@ -157,7 +157,11 @@ export default function MagnetOrderFlow({ siteInfo, whatsappPhone }: Props) {
                                 croppedPhotos={state.croppedPhotos}
                                 siteInfo={siteInfo}
                                 whatsappPhone={whatsappPhone}
-                                onBack={() => setState((s) => ({ ...s, step: "crop", cropIndex: TOTAL_PHOTOS - 1 }))}
+                                onBack={() => setState((s) => {
+                                    let last = TOTAL_PHOTOS - 1;
+                                    while (last > 0 && !s.rawPhotos[last]) last--;
+                                    return { ...s, step: "crop", cropIndex: last };
+                                })}
                                 onSuccess={handleOrderSuccess}
                             />
                         </div>

@@ -68,7 +68,7 @@ export default function PhotoUploader({ rawPhotos, onPhotosChange, onContinue }:
                         />
 
                         {rawPhotos[i] ? (
-                            <div className="relative aspect-[6/5] rounded-lg overflow-hidden border-2 border-[#2C5F72]">
+                            <div className="relative aspect-square rounded-lg overflow-hidden border-2 border-[#2C5F72]">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={rawPhotos[i]!}
@@ -97,7 +97,7 @@ export default function PhotoUploader({ rawPhotos, onPhotosChange, onContinue }:
                             </div>
                         ) : (
                             <div
-                                className="aspect-[6/5] rounded-lg border-2 border-dashed border-gray-300 hover:border-[#2C5F72] cursor-pointer flex flex-col items-center justify-center gap-2 text-gray-400 hover:text-[#2C5F72] transition-colors bg-gray-50 hover:bg-[#2C5F72]/5"
+                                className="aspect-square rounded-lg border-2 border-dashed border-gray-300 hover:border-[#2C5F72] cursor-pointer flex flex-col items-center justify-center gap-2 text-gray-400 hover:text-[#2C5F72] transition-colors bg-gray-50 hover:bg-[#2C5F72]/5"
                                 onClick={() => inputRefs.current[i]?.click()}
                                 onDrop={(e) => handleDrop(i, e)}
                                 onDragOver={handleDragOver}
